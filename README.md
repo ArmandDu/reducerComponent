@@ -4,7 +4,7 @@ A RenderProp Component and Higher Order Component function that implements the *
 
 I wanted to implement this feature after playing with [ReasonReact](https://reasonml.github.io/reason-react/).
 
-These functions implement the [reducerComponent](https://reasonml.github.io/reason-react/docs/en/state-actions-reducer.html) feature in ReasonReact.
+These functions are inspired by the [reducerComponent](https://reasonml.github.io/reason-react/docs/en/state-actions-reducer.html) feature in ReasonReact.
 
 This library provides two modules that does the same thing:
 
