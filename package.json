@@ -1,6 +1,6 @@
 {
   "name": "reducer-component",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A React.JS HoC implementing a reducerComponent pattern",
   "keywords": [
     "react",
@@ -16,10 +16,9 @@
     "prepare": "npm run build"
   },
   "author": "ArmandDu mail@armanddu.com",
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/ArmandDu/reducerComponent.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArmandDu/reducerComponent.git"
   },
   "bugs": "https://github.com/ArmandDu/reducerComponent/issues",
   "license": "MIT",
