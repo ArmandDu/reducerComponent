@@ -1,10 +1,11 @@
 // @flow
-import React, { type Node } from "react";
+import * as React from "react";
 
 type State = any;
 type Action = {type: string, payload?: any};
 
-type ReducerCreator = (actionTypes: Object) => (state: State, action: Action) => State;
+type Reducer = (state: State, action: Action, props: Object) => State;
+type ReducerCreator = (actionTypes: Object) => Reducer;
 
 type Props = {
     initialState: (p: Object) => Object | Object;
@@ -12,7 +13,7 @@ type Props = {
     reducerCreator: ReducerCreator,
     storeName: string,
 
-    children: ({send: Function, actionTypes: Object}) => Node,
+    children: ({send: Function, actionTypes: Object}) => React.Node,
 };
 
 
@@ -23,7 +24,7 @@ export class ReducerComponent extends React.Component<Props, State> {
     };
 
     enumActionTypes: Object;
-    reducer: (state: State, action: Action) => State;
+    reducer: Reducer;
 
 
     constructor(props: Props) {
@@ -37,7 +38,7 @@ export class ReducerComponent extends React.Component<Props, State> {
     }
 
     dispatch = (action: Action) => {
-        this.setState(prevState => this.reducer(prevState, action));
+        this.setState(prevState => this.reducer(prevState, action, this.props));
     };
 
     send = (type: string, payload?: any) => this.dispatch({type, payload});

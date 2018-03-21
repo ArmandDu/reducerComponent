@@ -107,6 +107,76 @@ describe("ReducerComponent", () => {
             wrapper.render();
         });
 
+        it("should have state in reducer function", (done) => {
+
+            const creator = () => (state) => {
+
+                expect(state).to.be.an("object").with.property("changed").with.equal(false);
+                done();
+                return state;
+            };
+
+            const Component = () => {
+                return (
+
+                    <ReducerComponent actionTypes={actionTypes} reducerCreator={creator} initialState={initialState}>
+                        {(props) => {
+                            props.send("SOME_ACTION");
+                            return null;
+                        }}
+                    </ReducerComponent>
+                )
+            };
+            const wrapper = shallow(<Component />);
+            wrapper.shallow();
+        });
+
+        it("should have action in reducer function", (done) => {
+
+            const creator = () => ({}, action) => {
+                expect(action).to.be.an("object").with.property("type").with.equal("SOME_ACTION");
+                done();
+                return state;
+            };
+
+            const Component = () => {
+                return (
+
+                    <ReducerComponent actionTypes={actionTypes} reducerCreator={creator} initialState={initialState}>
+                        {(props) => {
+                            props.send("SOME_ACTION");
+                            return null;
+                        }}
+                    </ReducerComponent>
+                )
+            };
+            const wrapper = shallow(<Component />);
+            wrapper.shallow();
+        });
+
+        it("should have props in reducer function", (done) => {
+
+            const creator = () => ({}, {}, props) => {
+                expect(props).to.be.an("object").with.property("aProp").with.equal(true);
+                done();
+                return state;
+            };
+
+            const Component = (props) => {
+                return (
+
+                    <ReducerComponent actionTypes={actionTypes} reducerCreator={creator} initialState={initialState} {...props}>
+                        {({send}) => {
+                            send("SOME_ACTION");
+                            return null;
+                        }}
+                    </ReducerComponent>
+                )
+            };
+            const wrapper = shallow(<Component aProp />);
+            wrapper.shallow();
+        });
+
     });
 
 });

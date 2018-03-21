@@ -100,10 +100,10 @@ describe("withReducerComponent", () => {
         });
 
         it("should have good displayName", () => {
-           const Component = () => {};
-           const Hoc = enhance(Component);
+            const Component = () => {};
+            const Hoc = enhance(Component);
 
-           expect(Hoc.displayName).to.equal("WithReducerComponent(Component)");
+            expect(Hoc.displayName).to.equal("WithReducerComponent(Component)");
         });
 
         it("should be able to pass actionTypes prop", (done) => {
@@ -140,6 +140,57 @@ describe("withReducerComponent", () => {
             const Hoc = enhance(component);
             const wrapper = shallow(<Hoc myProp />);
             wrapper.render();
+        });
+
+        it("should have state in reducer function", (done) => {
+            const component = (props) => {
+                props.send("SOME_ACTION");
+                return null;
+            };
+
+            const creator = () => (state) => {
+                expect(state).to.be.an("object").with.property("changed").with.equal(false);
+                done();
+                return state;
+            };
+
+            const Hoc = withReducerComponent(actionTypes, creator, initialState)(component);
+            const wrapper = shallow(<Hoc />);
+            wrapper.shallow().render();
+        });
+
+        it("should have action in reducer function", (done) => {
+            const component = (props) => {
+                props.send("SOME_ACTION");
+                return null;
+            };
+
+            const creator = () => ({}, action) => {
+                expect(action).to.be.an("object").with.property("type").with.equal("SOME_ACTION");
+                done();
+                return state;
+            };
+
+            const Hoc = withReducerComponent(actionTypes, creator, initialState)(component);
+            const wrapper = shallow(<Hoc />);
+            wrapper.shallow().render();
+        });
+
+        it("should have props in reducer function", (done) => {
+            const component = (props) => {
+                props.send("SOME_ACTION");
+                return null;
+            };
+
+            const creator = () => ({}, {}, props) => {
+                expect(props).to.be.an("object").with.property("aProp").with.equal(true);
+                done();
+                return state;
+            };
+
+            const Hoc = withReducerComponent(actionTypes, creator, initialState)(component);
+            const wrapper = shallow(<Hoc aProp />);
+            wrapper.shallow().render();
         });
 
     });

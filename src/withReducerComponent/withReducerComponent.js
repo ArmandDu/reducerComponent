@@ -1,13 +1,13 @@
 //@flow
-import React from "react";
+import * as React from "react";
 import ReducerComponent from "../reduceComponent/ReduceComponent";
 
 type State = any;
 type Action = {type: String, payload?: Object};
 
-type ReducerCreator = (actionTypes: Object) => (state: State, action: Action) => State;
+type ReducerCreator = (actionTypes: Object) => (state: State, action: Action, props: Object) => State;
 
-export const withReducerComponent = (actionTypes: Array<string>, reducerCreator: ReducerCreator, initialState : Object | Function, storeName: string ="state"): Function => (WrappedComponent): Function => {
+export const withReducerComponent = (actionTypes: Array<string>, reducerCreator: ReducerCreator, initialState : Object | Function, storeName: string ="state"): Function => (WrappedComponent): React.ComponentType<any> => {
 
 
     const WithReducerComponent = (props) => {
