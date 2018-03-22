@@ -38,7 +38,7 @@ export class ReducerComponent extends React.Component<Props, State> {
     }
 
     dispatch = (action: Action) => {
-        this.setState(prevState => this.reducer(prevState, action, this.props));
+        this.setState((prevState, props) => this.reducer(prevState, action, props));
     };
 
     send = (type: string, payload?: any) => this.dispatch({type, payload});
