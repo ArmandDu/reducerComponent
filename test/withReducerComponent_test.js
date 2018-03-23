@@ -1,12 +1,16 @@
+// @flow
+import {describe, it} from 'mocha'
 import React from "react";
 import Enzyme, {shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import withReducerComponent, {withReducerComponent as namedImport} from "../src/withReducerComponent/withReducerComponent";
+import type {ReducerCreator} from "../src/reduceComponent/ReduceComponent";
 
 const { expect } = require("chai");
 
 Enzyme.configure({ adapter: new Adapter() });
 
+type State = {changed: boolean};
 
 describe("withReducerComponent", () => {
 
@@ -21,7 +25,7 @@ describe("withReducerComponent", () => {
     });
 
     const actionTypes = ["ACTION"];
-    const reducerCreator = ({ACTION}) => (state, action) => {
+    const reducerCreator: ReducerCreator<"ACTION", State> = ({ACTION}) => (state, action) => {
 
         switch (action.type) {
             case ACTION:
@@ -41,7 +45,7 @@ describe("withReducerComponent", () => {
 
         it("should return a function", () => {
 
-            const reducer = reducerCreator(actionTypes);
+            const reducer = reducerCreator({ACTION: "ACTION"});
 
             expect(reducer).to.be.a("function");
         });
@@ -165,7 +169,7 @@ describe("withReducerComponent", () => {
                 return null;
             };
 
-            const creator = () => ({}, action) => {
+            const creator = () => (state, action) => {
                 expect(action).to.be.an("object").with.property("type").with.equal("SOME_ACTION");
                 done();
                 return state;
@@ -182,7 +186,7 @@ describe("withReducerComponent", () => {
                 return null;
             };
 
-            const creator = () => ({}, {}, props) => {
+            const creator = () => (state, {}, props) => {
                 expect(props).to.be.an("object").with.property("aProp").with.equal(true);
                 done();
                 return state;

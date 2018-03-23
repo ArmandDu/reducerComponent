@@ -1,12 +1,16 @@
+// @flow
+import {describe, it} from 'mocha'
 import React from "react";
 import Enzyme, {shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ReducerComponent, { ReducerComponent as namedImport} from "../src/reduceComponent/ReduceComponent";
+import type {InitialState, ReducerCreator} from "../src/reduceComponent/ReduceComponent";
 
 const { expect } = require("chai");
 
 Enzyme.configure({ adapter: new Adapter() });
 
+type State = {changed: boolean};
 
 describe("ReducerComponent", () => {
 
@@ -20,16 +24,18 @@ describe("ReducerComponent", () => {
 
     });
 
-    const actionTypes = ["ACTION"];
-    const reducerCreator = ({ACTION}) => (state, action) => {
+    const actionTypes = ["ACTION", "FOO"];
+    type ActionTypes = "ACTION" | "FOO";
+
+    const reducerCreator: ReducerCreator<ActionTypes, State> = (actions) => (state, action) => {
 
         switch (action.type) {
-            case ACTION:
+            case actions.ACTION:
                 return {changed: true};
             default: return state
         }
     };
-    const initialState = {changed: false};
+    const initialState: InitialState<any> = {changed: false};
 
     describe("initial values", () => {
         it("should have correct actiontype", () => {
@@ -38,7 +44,7 @@ describe("ReducerComponent", () => {
 
         it("should return a function", () => {
 
-            const reducer = reducerCreator(actionTypes);
+            const reducer = reducerCreator({ACTION: "ACTION"});
 
             expect(reducer).to.be.a("function");
         });
@@ -121,7 +127,7 @@ describe("ReducerComponent", () => {
 
                     <ReducerComponent actionTypes={actionTypes} reducerCreator={creator} initialState={initialState}>
                         {(props) => {
-                            props.send("SOME_ACTION");
+                            props.send("ACTION");
                             return null;
                         }}
                     </ReducerComponent>
@@ -133,8 +139,8 @@ describe("ReducerComponent", () => {
 
         it("should have action in reducer function", (done) => {
 
-            const creator = () => ({}, action) => {
-                expect(action).to.be.an("object").with.property("type").with.equal("SOME_ACTION");
+            const creator = () => (state, action) => {
+                expect(action).to.be.an("object").with.property("type").with.equal("ACTION");
                 done();
                 return state;
             };
@@ -144,7 +150,7 @@ describe("ReducerComponent", () => {
 
                     <ReducerComponent actionTypes={actionTypes} reducerCreator={creator} initialState={initialState}>
                         {(props) => {
-                            props.send("SOME_ACTION");
+                            props.send("ACTION");
                             return null;
                         }}
                     </ReducerComponent>
@@ -156,7 +162,7 @@ describe("ReducerComponent", () => {
 
         it("should have props in reducer function", (done) => {
 
-            const creator = () => ({}, {}, props) => {
+            const creator = () => (state, {}, props) => {
                 expect(props).to.be.an("object").with.property("aProp").with.equal(true);
                 done();
                 return state;
@@ -167,7 +173,7 @@ describe("ReducerComponent", () => {
 
                     <ReducerComponent actionTypes={actionTypes} reducerCreator={creator} initialState={initialState} {...props}>
                         {({send}) => {
-                            send("SOME_ACTION");
+                            send("ACTION");
                             return null;
                         }}
                     </ReducerComponent>

@@ -1,13 +1,10 @@
 //@flow
 import * as React from "react";
 import ReducerComponent from "../reduceComponent/ReduceComponent";
+import type {InitialState, ReducerCreator} from "../reduceComponent/ReduceComponent";
 
-type State = any;
-type Action = {type: String, payload?: Object};
 
-type ReducerCreator = (actionTypes: Object) => (state: State, action: Action, props: Object) => State;
-
-export const withReducerComponent = (actionTypes: Array<string>, reducerCreator: ReducerCreator, initialState : Object | Function, storeName: string ="state"): Function => (WrappedComponent): React.ComponentType<any> => {
+export const withReducerComponent = <T, State>(actionTypes: Array<T>, reducerCreator: ReducerCreator<T, State>, initialState : InitialState<State>, storeName: string ="state"): Function => (WrappedComponent): React.ComponentType<*> => {
 
 
     const WithReducerComponent = (props) => {
@@ -30,6 +27,5 @@ export const withReducerComponent = (actionTypes: Array<string>, reducerCreator:
 const getDisplayName = (WrappedComponent) => {
     return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 };
-
 
 export default withReducerComponent;
