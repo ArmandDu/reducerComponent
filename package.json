@@ -1,6 +1,6 @@
 {
   "name": "reducer-component",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A React.JS HoC implementing a reducerComponent pattern",
   "keywords": [
     "react",
